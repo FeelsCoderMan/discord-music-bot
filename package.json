@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@discordjs/voice": "^0.16.0",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "ffmpeg": "^0.0.4",
+    "libsodium-wrappers": "^0.7.13",
+    "puppeteer": "^21.3.6",
+    "ytdl-core": "^4.11.5"
+  },
+  "scripts": {
+    "dev": "node main.js",
+    "deploy": "node deployCommands.js"
+  },
+  "name": "discord-music-bot",
+  "description": "To install dependencies:",
+  "version": "1.0.0",
+  "main": "main.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
