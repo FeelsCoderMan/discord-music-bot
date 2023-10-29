@@ -5,6 +5,10 @@ const { Collection } = require("discord.js");
 const constants = require("./constants");
 const logger = require("./logger");
 
+/**
+ * Loading commands to the server
+ * @param {import("discord.js").Client} client
+ */
 function loadCommands(client) {
     client.commands = new Collection();
 
@@ -27,6 +31,11 @@ function loadCommands(client) {
     logger.logMainProcess("Finished loading commands");
 }
 
+/**
+ * Loading events to the server
+ *
+ * @param {import("discord.js").Client} client
+ */
 function loadEvents(client) {
     const eventsPath = path.join(__basedir, constants.directory.eventDir);
     const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith(".js"));

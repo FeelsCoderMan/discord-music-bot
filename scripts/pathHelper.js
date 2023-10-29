@@ -2,34 +2,66 @@ const fs = require("fs");
 const path = require("path");
 const constants = require("./constants");
 
+/**
+ * Generates playlist path by playlist name
+ * @param {string} playlistName - name of the playlist
+ * @return {string} path of the playlist
+ */
 function retrievePlaylistPath(playlistName) {
     return path.join(__basedir, constants.directory.musicDir, playlistName);
 }
 
+/**
+ * Generates music folder path
+ * @return {string} path of the music folder
+ */
 function retrieveMusicFolderPath() {
     return path.join(__basedir, constants.directory.musicDir);
 }
 
+/**
+ * Checks if the music folder is present
+ * @return {boolean}
+ */
 function checkIfMusicFolderExists() {
     const musicFolderPath = retrieveMusicFolderPath();
 
     return checkIfFileExists(musicFolderPath);
 }
 
+/**
+ * Checks if the playlist exists in the music folder
+ * @param {string} playlistName - name of the playlist
+ * @return {boolean}
+ */
 function checkIfPlaylistExists(playlistName) {
     let playlistPath = retrievePlaylistPath(playlistName);
 
     return checkIfFileExists(playlistPath);
 }
 
+/**
+ * Checks if the file exists
+ * @param {fs.PathLike} filePath - absolute path of the file
+ * @return {boolean}
+ */
 function checkIfFileExists(filePath) {
     return fs.existsSync(filePath);
 }
 
-function removeFile(videoFilePath) {
-    return fs.unlinkSync(videoFilePath);
+/**
+ * Removes the file
+ * @param {fs.PathLike} filePath - absolute path of the file
+ */
+function removeFile(filePath) {
+    return fs.unlinkSync(filePath);
 }
 
+/**
+ * Generates array of music file paths by name of the playlist
+ * @param {string} playlistName - name of the playlist
+ * @return {string[]} array of the ordered music file paths
+ */
 function retrieveMusicPathsByPlaylist(playlistName) {
     if (checkIfPlaylistExists(playlistName)) {
         return fs.readdirSync(retrievePlaylistPath(playlistName)).filter(function (file) {
@@ -42,9 +74,15 @@ function retrieveMusicPathsByPlaylist(playlistName) {
         });
     }
 
-    return null;
+    return [];
 }
 
+/**
+ * Creates a playlist directory in music folder
+ *
+ * @param {string} playlistName - name of the playlist that will be saved in 
+ * music folder
+ */
 function createPlaylistDir(playlistName) {
     const isMusicFolderPresent = checkIfMusicFolderExists();
     
@@ -55,6 +93,14 @@ function createPlaylistDir(playlistName) {
     return fs.mkdirSync(retrievePlaylistPath(playlistName));
 }
 
+/**
+ * Generates a music file path according to the parameters
+ *
+ * @param {string} playlistName - name of the playlist
+ * @param {string} musicTitle - title of the music
+ * @param {number} musicIndex - position of the music
+ * @return {string} music file path
+ */
 function prepareMusicFilePath(playlistName, musicTitle, musicIndex) {
     const regex = new RegExp(constants.regex.musicTitle, "g");
     let title = musicTitle.replace(regex, "");
@@ -64,6 +110,10 @@ function prepareMusicFilePath(playlistName, musicTitle, musicIndex) {
     return path.join(__basedir, constants.directory.musicDir, playlistName, title);
 }
 
+/**
+ * Get playlist names from music folder
+ * @return {string[]}
+ */
 function getPlaylistNames() {
     const musicFolderPath = retrieveMusicFolderPath();
     
@@ -74,6 +124,12 @@ function getPlaylistNames() {
     return [];
 }
 
+/**
+ * Get total number of musics that playlist has
+ *
+ * @param {string} playlistName
+ * @return {number | null}
+ */
 function getTotalMusicsFromPlaylistName(playlistName) {
     const playlistPath = retrievePlaylistPath(playlistName);
     

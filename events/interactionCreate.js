@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const logger = require("../scripts/logger");
-const { handleButtonEvent } = require("../scripts/buttonEventHelper");
+const buttonEventHelper = require("../scripts/buttonEventHelper");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -25,7 +25,7 @@ module.exports = {
                 logger.error(error);
             }
         } else if (interaction.isButton()) {
-            handleButtonEvent(interaction);
+            buttonEventHelper.handleButtonEvent(interaction);
         }
 
     }

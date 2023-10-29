@@ -8,6 +8,7 @@ Create a .env file that contains these fields:
 - DISCORD_TOKEN
 - CLIENT_ID
 - GUILD_ID
+
 DISCORD_TOKEN should be the token of the discord bot and it can be retrieved from developer portal.
 CLIENT_ID should be the client id of the server.
 GUILD_ID should be retrieved from developer portal.

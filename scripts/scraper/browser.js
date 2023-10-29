@@ -1,6 +1,10 @@
 const logger = require("../logger");
 const puppeteer = require("puppeteer");
 
+/**
+ * Opens the browser
+ * @return {puppeteer.Browser} browser
+ */
 async function startBrowser() {
     let browser;
 

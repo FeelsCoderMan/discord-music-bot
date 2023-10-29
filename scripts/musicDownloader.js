@@ -6,6 +6,13 @@ const scraper = require("./scraper/mainScraper");
 const logger = require("./logger");
 const pathHelper = require("./pathHelper");
 
+/**
+ * Downloads the music from youtube url
+ * @param {string} url - url of the music
+ * @param {string} playlistName - name of playlist that music will be stored on
+ * @param {number} musicIndex - position of the music according to the playlist
+ * @return {{error: boolean, errorMessage: string, downloadedMusicTitle: string}} 
+ */
 async function downloadMusicFromUrl(url, playlistName, musicIndex) {
     let result = {
         error: false,
@@ -87,11 +94,23 @@ async function downloadMusicFromUrl(url, playlistName, musicIndex) {
     return result;
 }
 
+/**
+ * Formats the music title from response of ytdl
+ * @param {string} title
+ * @return {string}
+ */
 function formatMusicTitle(title) {
     const regex = new RegExp(constants.regex.musicTitle, "g");
     return title.replace(regex, "");
 }
 
+/**
+ * Converts video file to audio file via ffmpeg
+ *
+ * @param {string} videoFilePath - absolute path of the video file
+ * @param {string} audioFilePath - absolute path of the audio file
+ * @return {Promise<boolean>} true if conversion is successful
+ */
 async function convertVideoToAudio(videoFilePath, audioFilePath) {
     logger.info("Converting " + videoFilePath + " to " + audioFilePath);
     const process = new ffmpeg(videoFilePath);
@@ -100,7 +119,7 @@ async function convertVideoToAudio(videoFilePath, audioFilePath) {
     return new Promise((resolve, reject) => {
         video.fnExtractSoundToMP3(audioFilePath, function (error, file) {
             if (!error) {
-                logger.info(`Audio file ${file} is created`);
+                logger.info("Audio file " + file  + " is created");
                 return resolve(true);
             }
 
@@ -111,6 +130,13 @@ async function convertVideoToAudio(videoFilePath, audioFilePath) {
     })
 }
 
+/**
+ * Downloads youtube playlist from youtube playlist url
+ * @param {string} playlistUrl - url of the youtube playlist
+ * @param {string} playlistName - name of playlist that musics will be stored on
+ * @param {import("discord.js").BaseInteraction} interaction
+ * @return {{error: boolean, errorMessage: string, musicUrls: string[]}}
+ */
 async function downloadPlaylistFromUrl(playlistUrl, playlistName, interaction) {
     var result = {
         error: false,
@@ -149,15 +175,43 @@ async function downloadPlaylistFromUrl(playlistUrl, playlistName, interaction) {
 
             await interaction.editReply("Downloading (" + (i + 1) + "/" + musicUrls.length + ") : " + musicResult.downloadedMusicTitle)
         }
+
+        result.musicUrls = musicUrls;
+        return result;
     }
 
-    result.musicUrls = musicUrls;
+    result.error = true;
+    result.errorMessage = "Could not find any music in the url of " + playlistUrl;
     return result;
 }
 
+/**
+ * Checks if the url is a youtube playlist url
+ * @param {string} playlistUrl - url of the playlist
+ * @return {boolean}
+ */
 function validatePlaylist(playlistUrl) {
-    // TODO: improve validation
-    return playlistUrl.startsWith(constants.url.baseYoutubeUrl) && playlistUrl.includes("&list");
+    let prefixOfYoutubePlaylist;
+    
+    if (!playlistUrl.includes("https://")) {
+        return false;
+    }
+
+    if (playlistUrl.includes("https://www.")) {
+        prefixOfYoutubePlaylist = constants.url.baseYoutubeUrl + constants.endPoints.playList;
+    } else {
+        prefixOfYoutubePlaylist = constants.url.baseYoutubeUrlExceptW3 + constants.endPoints.playList;
+    }
+
+    if (playlistUrl.includes("list=")) {
+        const listId = playlistUrl.split("list=")
+
+        if (listId) {
+            return playlistUrl.startsWith(prefixOfYoutubePlaylist);
+        }
+    }
+
+    return false;
 }
 
 module.exports = {

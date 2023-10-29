@@ -1,5 +1,10 @@
 const { getTotalMusicsFromPlaylistName } = require("./pathHelper");
 
+/**
+ * Formats name of the playlists for embed playlist
+ * @param {string[]} playlistNames - array of name of playlists
+ * @return {string} message that contains playlist name with total music information
+ */
 function formatEmbedPlaylistNames(playlistNames) {
     let message = "No playlist found.";
 

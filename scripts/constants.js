@@ -9,7 +9,8 @@ module.exports = {
         audio: ".mp3"
     },
     url: {
-        baseYoutubeUrl: "https://www.youtube.com"
+        baseYoutubeUrl: "https://www.youtube.com",
+        baseYoutubeUrlExceptW3: "https://youtube.com"
     },
     endPoints: {
         playList: "/playlist"
@@ -22,7 +23,20 @@ module.exports = {
         prev: "prev",
         next: "next",
         stop: "stop",
-        pause: "paus"
-
+        pause: "paus",
+        more: "more",
+        volumeUp: "volu",
+        volumeDown: "vold"
+    },
+    enumAudioSelection: {
+        prev: "prev",
+        next: "next",
+        curr: "curr"
+    },
+    playlistSelector: "#wc-endpoint",
+    volume: {
+        initial: 0.5,
+        max: 1,
+        min: 0
     }
 }

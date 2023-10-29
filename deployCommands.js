@@ -11,6 +11,10 @@ const clientId = env.CLIENT_ID;
 const guildId = env.GUILD_ID;
 const token = env.DISCORD_TOKEN;
 
+/**
+ * Deploys commands to the server.
+ * Commands can be found in commands directory.
+ */
 function deployCommands() {
     if (!token) {
         logger.error("DISCORD_TOKEN is missing on .env file.");

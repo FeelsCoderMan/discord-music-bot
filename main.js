@@ -5,6 +5,9 @@ const { loadEvents, loadCommands } = require("./scripts/loadHelper");
 const logger = require("./scripts/logger");
 global.__basedir = __dirname;
 
+/**
+ * Main function of the project that initializes the discord bot.
+ */
 function initBot() {
     const token = process.env.DISCORD_TOKEN;
 
