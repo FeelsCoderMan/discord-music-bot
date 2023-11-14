@@ -1,6 +1,6 @@
-const embedHelper = require("../scripts/embedHelper");
-const pathHelper = require("../scripts/pathHelper");
-const formatHelper = require("../scripts/formatHelper");
+const embedHelper = require("../scripts/helpers/embedHelper");
+const pathHelper = require("../scripts/helpers/pathHelper");
+const formatHelper = require("../scripts/helpers/formatHelper");
 const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {

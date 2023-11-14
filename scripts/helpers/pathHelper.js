@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const constants = require("./constants");
+const constants = require("../constants");
 
 /**
  * Generates playlist path by playlist name

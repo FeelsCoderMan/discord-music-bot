@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const logger = require("../scripts/logger");
-const buttonEventHelper = require("../scripts/buttonEventHelper");
+const buttonEventHelper = require("../scripts/helpers/buttonEventHelper");
 
 module.exports = {
     name: Events.InteractionCreate,

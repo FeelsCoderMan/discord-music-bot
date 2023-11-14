@@ -1,6 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require("discord.js");
 const { AudioPlayerStatus } = require("@discordjs/voice");
-const constants = require("./constants");
+const constants = require("../constants");
 
 /**
  * Prepares and sends embed playlist to the channel

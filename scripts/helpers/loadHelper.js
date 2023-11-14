@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const { Collection } = require("discord.js");
 
-const constants = require("./constants");
-const logger = require("./logger");
+const constants = require("../constants");
+const logger = require("../logger");
 
 /**
  * Loading commands to the server

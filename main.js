@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits } = require("discord.js");
 require("dotenv").config();
 
-const { loadEvents, loadCommands } = require("./scripts/loadHelper");
+const { loadEvents, loadCommands } = require("./scripts/helpers/loadHelper");
 const logger = require("./scripts/logger");
 global.__basedir = __dirname;
 

@@ -1,7 +1,7 @@
 const { getVoiceConnection, AudioPlayerStatus } = require("@discordjs/voice");
-const constants = require("./constants");
+const constants = require("../constants");
 const embedHelper = require("./embedHelper");
-const logger = require("./logger");
+const logger = require("../logger");
 
 /**
  * Emits a button event from AudioPlayer

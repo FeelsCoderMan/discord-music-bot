@@ -1,5 +1,5 @@
 const { createAudioResource } = require("@discordjs/voice");
-const constants = require("./constants");
+const constants = require("../constants");
 
 /**
  * Creates audio resource from playlist model

@@ -4,7 +4,7 @@ const ytdl = require("ytdl-core");
 const constants = require("./constants");
 const scraper = require("./scraper/mainScraper");
 const logger = require("./logger");
-const pathHelper = require("./pathHelper");
+const pathHelper = require("./helpers/pathHelper");
 
 /**
  * Downloads the music from youtube url
@@ -62,15 +62,22 @@ async function downloadMusicFromUrl(url, playlistName, musicIndex) {
 
             if (writeStream) {
                 // TODO: Handle an error where writing process is failed
-                await new Promise((resolve, reject) => {
-                    writeStream.on("finish", async function() {
+                let isWritingSuccess = await new Promise((resolve, reject) => {
+                    writeStream.on("finish", function() {
                         logger.info("Writing file is done");
-                        resolve();
-                    }).on("error", err => {
-                        reject(err);
+                        resolve(true);
+                    }).on("error", function () {
+                        reject(false);
                     });
                 })
+
                 writeStream.close();
+
+                if (!isWritingSuccess) {
+                    result.errorMessage = "Writing stream to " + videoFilePath + " is failed";
+                    result.error = true;
+                    return result;
+                }
             }
 
             const canBeConverted = await convertVideoToAudio(videoFilePath, audioFilePath);
@@ -165,7 +172,7 @@ async function downloadPlaylistFromUrl(playlistUrl, playlistName, interaction) {
 
         for (let i = 0; i < musicUrls.length; i++) {
             let musicUrl = musicUrls[i];
-            let musicResult = await downloadMusicFromUrl(musicUrl, playlistName, i, interaction);
+            let musicResult = downloadMusicFromUrl(musicUrl, playlistName, i, interaction);
 
             if (musicResult.error) {
                 result.error = true;
