@@ -18,6 +18,24 @@ function Playlist() {
 
 
 /**
+ * Randomizes the playlist
+ */
+Playlist.prototype.shuffle = function () {
+    let currentIdx = this.playlistLen;
+
+    while (currentIdx > 0) {
+        let randomIdx = Math.floor(Math.random() * currentIdx);
+        currentIdx--;
+
+        let tempVal = this.playlist[currentIdx];
+        this.playlist[currentIdx] = this.playlist[randomIdx];
+        this.playlist[randomIdx] = tempVal;
+    }
+
+    this.idx = 0;
+}
+
+/**
  * Returns volume field of the playlist
  */
 Playlist.prototype.getVolume = function () {

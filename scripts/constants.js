@@ -26,7 +26,8 @@ module.exports = {
         pause: "paus",
         more: "more",
         volumeUp: "volu",
-        volumeDown: "vold"
+        volumeDown: "vold",
+        shuffle: "shuf"
     },
     enumAudioSelection: {
         prev: "prev",

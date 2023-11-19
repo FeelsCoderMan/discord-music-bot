@@ -102,7 +102,12 @@ function createButtonRows(buttonOptions) {
                     .setCustomId(constants.buttonId.volumeDown)
                     .setLabel("🔈")
                     .setStyle(ButtonStyle.Primary)
-                    .setDisabled(Boolean(buttonOptions && buttonOptions.isVolumeMin))
+                    .setDisabled(Boolean(buttonOptions && buttonOptions.isVolumeMin)),
+                new ButtonBuilder()
+                    .setCustomId(constants.buttonId.shuffle)
+                    .setLabel("🔀")
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(false)
             );
         buttonRows.push(buttonRow);
     }

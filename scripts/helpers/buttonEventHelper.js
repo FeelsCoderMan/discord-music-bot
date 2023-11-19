@@ -50,6 +50,17 @@ function loadButtonEventListeners(audioPlayer, playlist, embedPlaylistMessage, c
     loadMoreButtonEvent(audioPlayer, playlist, embedPlaylistMessage);
     loadVolumeUpButtonEvent(audioPlayer, playlist, embedPlaylistMessage);
     loadVolumeDownButtonEvent(audioPlayer, playlist, embedPlaylistMessage);
+    loadShuffleButtonEvent(audioPlayer, playlist, embedPlaylistMessage);
+}
+
+function loadShuffleButtonEvent(audioPlayer, playlist, embedPlaylistMessage) {
+    audioPlayer.on(constants.buttonId.shuffle, async () => {
+        playlist.shuffle();
+        await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
+            updateDescription: "Playlist is shuffled."
+        }, embedHelper.prepareButtonOptions(playlist, audioPlayer.state.status));
+        audioPlayer.emit(AudioPlayerStatus.Idle, null, null, constants.enumAudioSelection.curr);
+    });
 }
 
 /**

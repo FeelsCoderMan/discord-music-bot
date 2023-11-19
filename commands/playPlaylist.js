@@ -57,7 +57,7 @@ module.exports = {
         const musicPaths = pathHelper.retrieveMusicPathsByPlaylist(playlistName);
 
         if (musicPaths && musicPaths.length > 0) {
-            embedPlaylistMessage = await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
+             await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
                 updateDescription: "Found playlist " + playlistName + " which has " + musicPaths.length + " musics.",
                 updateTitle: "Playlist " + playlistName
             });
