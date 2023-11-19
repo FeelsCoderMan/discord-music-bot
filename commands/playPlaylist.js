@@ -57,7 +57,7 @@ module.exports = {
         const musicPaths = pathHelper.retrieveMusicPathsByPlaylist(playlistName);
 
         if (musicPaths && musicPaths.length > 0) {
-            await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
+            embedPlaylistMessage = await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
                 updateDescription: "Found playlist " + playlistName + " which has " + musicPaths.length + " musics.",
                 updateTitle: "Playlist " + playlistName
             });
@@ -92,7 +92,7 @@ function initializeAudioPlayer(embedPlaylistMessage, connection, musicPaths) {
     });
     
     connection.subscribe(audioPlayer);
-    const playlist = new Playlist()
+    const playlist = new Playlist();
     playlist.setPlaylist(musicPaths);
 
     const EnumAudioSelection = constants.enumAudioSelection;

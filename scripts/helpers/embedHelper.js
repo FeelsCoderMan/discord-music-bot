@@ -70,7 +70,7 @@ function createButtonRows(buttonOptions) {
                 .setCustomId(constants.buttonId.next)
                 .setLabel("⏭")
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(Boolean(!buttonOptions || (buttonOptions && (buttonOptions.atLast || buttonOptions.isPaused)))),
+                .setDisabled(Boolean(!buttonOptions || (buttonOptions && (buttonOptions.atLast || buttonOptions.isPaused || buttonOptions.isLastMusicPlayed)))),
             new ButtonBuilder()
                 .setCustomId(constants.buttonId.pause)
                 .setLabel(buttonOptions && buttonOptions.isPaused ? "▶" : "⏸")

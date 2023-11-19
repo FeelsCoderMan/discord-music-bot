@@ -172,7 +172,7 @@ async function downloadPlaylistFromUrl(playlistUrl, playlistName, interaction) {
 
         for (let i = 0; i < musicUrls.length; i++) {
             let musicUrl = musicUrls[i];
-            let musicResult = downloadMusicFromUrl(musicUrl, playlistName, i, interaction);
+            let musicResult = await downloadMusicFromUrl(musicUrl, playlistName, i, interaction);
 
             if (musicResult.error) {
                 result.error = true;
