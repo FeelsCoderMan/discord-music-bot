@@ -21,7 +21,7 @@ module.exports = {
     async execute(interaction) {
         let errorMsg;
         const playlistName = interaction.options.getString("playlistname");
-        let embedPlaylistMessage = await embedHelper.sendInitialEmbedPlaylist(interaction);
+        let embedPlaylistMessage = await embedHelper.sendInitialEmbedPlaylist(interaction, true);
         const connection = getVoiceConnection(interaction.guildId);
 
         if (connection) {

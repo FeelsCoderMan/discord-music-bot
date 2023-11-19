@@ -72,5 +72,6 @@ function getMusicTitleFromMusicPath(musicPath) {
 }
 
 module.exports = {
-    createAudioResourceByMusicPath: createAudioResourceByMusicPath
+    createAudioResourceByMusicPath: createAudioResourceByMusicPath,
+    getMusicTitleFromMusicPath: getMusicTitleFromMusicPath
 }

@@ -140,7 +140,6 @@ function getTotalMusicsFromPlaylistName(playlistName) {
     return null;
 }
 
-
 module.exports = {
     checkIfPlaylistExists: checkIfPlaylistExists,
     retrieveMusicPathsByPlaylist: retrieveMusicPathsByPlaylist,

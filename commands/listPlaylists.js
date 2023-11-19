@@ -10,6 +10,6 @@ module.exports = {
     async execute(interaction) {
         let playlistNames = pathHelper.getPlaylistNames();
         let description = formatHelper.formatEmbedPlaylistNames(playlistNames);
-        await embedHelper.sendEmbedPlaylistNames(interaction, description);
+        await embedHelper.sendInitialEmbedPlaylist(interaction, false, "List Of Playlists", description);
     }
 }

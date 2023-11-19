@@ -6,28 +6,38 @@ const constants = require("../constants");
  * Prepares and sends embed playlist to the channel
  *
  * @param {import("discord.js").BaseInteraction} interaction
+ * @param {boolean} [shouldButtonRender] - title of the embed
+ * @param {string} [title] - title of the embed
+ * @param {string} [description] - description of the embed
  * @return {Promise<import("discord.js").Message<boolean>>}
  */
-function sendInitialEmbedPlaylist(interaction) {
-    let embedPlaylist = createInitialEmbedPlaylist();
-    let buttonRows = createButtonRows();
+function sendInitialEmbedPlaylist(interaction, shouldButtonRender, title, description) {
+    let embedObj = {
+        embeds: [],
+        components: []
+    };
 
-    return interaction.channel.send({
-        embeds: [embedPlaylist],
-        components: [...buttonRows]
-    })
+    let embedPlaylist = createInitialEmbedPlaylist(title, description);
+
+    embedObj.embeds.push(embedPlaylist);
+    
+    if (shouldButtonRender) {
+        let buttonRows = createButtonRows();
+        embedObj.components.push(...buttonRows);
+    }
+
+    return interaction.channel.send(embedObj);
 }
 
 /**
- * Send embed playlist that contains playlist names
+ * Prepares and sends embed playlist content to the channel
  * @param {import("discord.js").BaseInteraction} interaction
- * @param {string} description
+ * @param {string} [title] - title of the embed
+ * @param {string} [description] - description of the embed
  * @return {Promise<import("discord.js").Message<boolean>>}
  */
-function sendEmbedPlaylistNames(interaction, description) {
-    let embedListOfPlaylists = new EmbedBuilder()
-        .setTitle("List Of Playlists")
-        .setDescription(description);
+function sendInitialEmbedPlaylistContent(interaction, title, description) {
+    let embedListOfPlaylists = createInitialEmbedPlaylist(title, description);
 
     return interaction.channel.send({
         embeds: [embedListOfPlaylists]
@@ -36,12 +46,14 @@ function sendEmbedPlaylistNames(interaction, description) {
 
 /**
  * Creates default embed playlist
+ * @param {string} [title] - title of the embed
+ * @param {string} [description] - description of the embed
  * @return {EmbedBuilder}
  */
-function createInitialEmbedPlaylist() {
+function createInitialEmbedPlaylist(title, description) {
     return new EmbedBuilder()
-        .setTitle("Playlist")
-        .setDescription("Initialized embed");
+        .setTitle(title || "Playlist")
+        .setDescription(description || "Initialized embed");
 }
 
 /**
@@ -258,6 +270,6 @@ function prepareButtonOptions(playlist, audioPlayerState) {
 module.exports = {
     sendInitialEmbedPlaylist: sendInitialEmbedPlaylist,
     updateEmbedPlaylistByOptions: updateEmbedPlaylistByOptions,
-    sendEmbedPlaylistNames: sendEmbedPlaylistNames,
+    sendInitialEmbedPlaylistContent: sendInitialEmbedPlaylistContent,
     prepareButtonOptions: prepareButtonOptions
 }

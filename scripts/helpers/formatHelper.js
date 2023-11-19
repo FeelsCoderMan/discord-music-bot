@@ -1,3 +1,4 @@
+const musicHelper = require("./musicHelper");
 const { getTotalMusicsFromPlaylistName } = require("./pathHelper");
 
 /**
@@ -18,6 +19,24 @@ function formatEmbedPlaylistNames(playlistNames) {
     return message;
 }
 
+/**
+ * Formats name of the musics for embed playlist
+ * @param {string[]} musicNames - array of name of musics that belong to the playlist
+ * @return {string} message that contains playlist name with total music information
+ */
+function formatEmbedMusicNames(musicNames) {
+    let message = "No musics found.";
+
+    if (musicNames && musicNames.length > 0) {
+        message = musicNames.map(function (musicName, idx) {
+            return (idx + 1) + ". " + musicHelper.getMusicTitleFromMusicPath(musicName);
+        }).join("\n");
+    }
+
+    return message;
+}
+
 module.exports = {
-    formatEmbedPlaylistNames: formatEmbedPlaylistNames
+    formatEmbedPlaylistNames: formatEmbedPlaylistNames,
+    formatEmbedMusicNames: formatEmbedMusicNames
 }
