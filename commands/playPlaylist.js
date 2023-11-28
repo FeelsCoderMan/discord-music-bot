@@ -8,6 +8,9 @@ const constants = require("../scripts/constants");
 const Playlist = require("../scripts/models/playlist");
 const musicHelper = require("../scripts/helpers/musicHelper");
 const buttonEventHelper = require("../scripts/helpers/buttonEventHelper");
+const EmbedPlaylistOptions = require("../scripts/models/embedPlaylistOptions");
+const ButtonOptions = require("../scripts/models/buttonOptions");
+const { createButtonOptions, createButtonOptionIfLastMusicPlayed } = require("../scripts/helpers/buttonOptionsHelper");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,15 +24,15 @@ module.exports = {
     async execute(interaction) {
         let errorMsg;
         const playlistName = interaction.options.getString("playlistname");
-        let embedPlaylistMessage = await embedHelper.sendInitialEmbedPlaylist(interaction, true);
+        await embedHelper.sendInitialEmbedPlaylist(interaction, true);
         const connection = getVoiceConnection(interaction.guildId);
+        let embedPlaylistOptions = new EmbedPlaylistOptions();
 
         if (connection) {
             errorMsg = "Discord bot is already running in voice channel";
             logger.error(errorMsg);
-            await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, true, {
-                updateDescription: errorMsg
-            });
+            embedPlaylistOptions.setDescription(errorMsg);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
             return;
         }
 
@@ -37,9 +40,8 @@ module.exports = {
         if (!pathHelper.checkIfPlaylistExists(playlistName)) {
             errorMsg = "Could not find playlist " + playlistName;
             logger.error(errorMsg);
-            await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, true, {
-                updateDescription: errorMsg
-            });
+            embedPlaylistOptions.setDescription(errorMsg);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
             return;
         }
 
@@ -48,19 +50,17 @@ module.exports = {
         if (!voiceChannel) {
             errorMsg = "Could not find voice channel";
             logger.error(errorMsg);
-            await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, true, {
-                updateDescription: errorMsg
-            });
+            embedPlaylistOptions.setDescription(errorMsg);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
             return;
         }
         
         const musicPaths = pathHelper.retrieveMusicPathsByPlaylist(playlistName);
 
         if (musicPaths && musicPaths.length > 0) {
-             await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
-                updateDescription: "Found playlist " + playlistName + " which has " + musicPaths.length + " musics.",
-                updateTitle: "Playlist " + playlistName
-            });
+            embedPlaylistOptions.setDescription("Found playlist " + playlistName + " which has " + musicPaths.length + " musics.");
+            embedPlaylistOptions.setTitle("Playlist " + playlistName);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, false, embedPlaylistOptions);
 
 
             const connection = joinVoiceChannel({
@@ -72,19 +72,25 @@ module.exports = {
             if (!connection) {
                 errorMsg = "Could not establish connection between bot and voice channel.";
                 logger.error(errorMsg);
-                await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, true, {
-                    updateDescription: errorMsg
-                });
+                embedPlaylistOptions.setDescription(errorMsg);
+                await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
                 return;
             }
 
-            initializeAudioPlayer(embedPlaylistMessage, connection, musicPaths);
+            initializeAudioPlayer(interaction, connection, musicPaths);
         }
     }
 }
 
 
-function initializeAudioPlayer(embedPlaylistMessage, connection, musicPaths) {
+/**
+ * Creates an audio player and connects it to the connection with button events
+ * @param {import("discord.js").BaseInteraction} interaction
+ * @param {import("@discordjs/voice").VoiceConnection} connection
+ * @param {string[]} musicPaths
+ * @return {void}
+ */
+function initializeAudioPlayer(interaction, connection, musicPaths) {
     const audioPlayer = createAudioPlayer();
 
     audioPlayer.on("error", error => {
@@ -105,11 +111,9 @@ function initializeAudioPlayer(embedPlaylistMessage, connection, musicPaths) {
         audio = musicHelper.createAudioResourceByMusicPath(playlist, enumAudioSelection || EnumAudioSelection.next);
 
         if (!audio) {
-            return await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
-                updateDescription: "Audio player finished playing last music"
-            }, {
-                isLastMusicPlayed: true
-            });
+            let embedPlaylistOptions = new EmbedPlaylistOptions();
+            embedPlaylistOptions.setDescription("Audio player finished playing last music");
+            return await embedHelper.updateEmbedPlaylistByOptions(interaction, false, embedPlaylistOptions, createButtonOptionIfLastMusicPlayed());
         }
         
         audio.volume.setVolume(playlist.getVolume());
@@ -117,32 +121,15 @@ function initializeAudioPlayer(embedPlaylistMessage, connection, musicPaths) {
     });
 
     audioPlayer.on(AudioPlayerStatus.Playing, async () => {
-         await embedHelper.updateEmbedPlaylistByOptions(embedPlaylistMessage, false, {
-            updateField: [
-                {
-                    name: "Currently Playing",
-                    value: audio.metadata.title
-                },
-                {
-                    name: "Music Position",
-                    value: audio.metadata.position + "/" + audio.metadata.totalMusics
-                },
-                {
-                    name: "Prev Music",
-                    value: audio.metadata.prevMusic
-                },
-                {
-                    name: "Next Music",
-                    value: audio.metadata.nextMusic
-                },
-                {
-                    name: "Volume",
-                    value: (playlist.getVolume() * 100).toString() + "/100"
-                }
-            ]
-        }, embedHelper.prepareButtonOptions(playlist, audioPlayer.state.status));
+        let embedPlaylistOptions = new EmbedPlaylistOptions();
+        embedPlaylistOptions.addField({ name: "Currently Playing", value: audio.metadata.title });
+        embedPlaylistOptions.addField({ name: "Music Position", value: audio.metadata.position + "/" + audio.metadata.totalMusics });
+        embedPlaylistOptions.addField({ name: "Prev Music", value: audio.metadata.prevMusic });
+        embedPlaylistOptions.addField({ name: "Next Music", value: audio.metadata.nextMusic });
+        embedPlaylistOptions.addField({ name: "Volume", value: (playlist.getVolume() * 100).toString() + "/100" });
+        await embedHelper.updateEmbedPlaylistByOptions(interaction, false, embedPlaylistOptions, createButtonOptions(playlist, audioPlayer.state.status));
     });
 
-    buttonEventHelper.loadButtonEventListeners(audioPlayer, playlist, embedPlaylistMessage, connection);
+    buttonEventHelper.loadButtonEventListeners(audioPlayer, playlist, interaction, connection);
 }
 

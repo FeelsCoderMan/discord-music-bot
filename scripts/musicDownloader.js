@@ -180,6 +180,7 @@ async function downloadPlaylistFromUrl(playlistUrl, playlistName, interaction) {
                 return result;
             }
 
+            // TODO: Use setTimeout for downloading last music
             await interaction.editReply("Downloading (" + (i + 1) + "/" + musicUrls.length + ") : " + musicResult.downloadedMusicTitle)
         }
 

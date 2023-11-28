@@ -4,6 +4,8 @@ require("dotenv").config();
 const { loadEvents, loadCommands } = require("./scripts/helpers/loadHelper");
 const logger = require("./scripts/logger");
 global.__basedir = __dirname;
+global.messageId = {};
+global.message = {};
 
 /**
  * Main function of the project that initializes the discord bot.
