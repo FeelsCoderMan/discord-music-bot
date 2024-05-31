@@ -24,7 +24,7 @@ module.exports = {
             errorMsg = "Could not find playlist " + playlistName;
             logger.error(errorMsg);
             embedPlaylistOptions.setDescription(errorMsg);
-            await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions);
             return;
         }
 
@@ -33,6 +33,6 @@ module.exports = {
         embedPlaylistOptions.setTitle("List of musics of playlist " + playlistName);
         embedPlaylistOptions.setDescription(formatHelper.formatEmbedMusicNames(musicPaths));
 
-        await embedHelper.updateEmbedPlaylistByOptions(interaction, false, embedPlaylistOptions);
+        await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions);
     }
 }

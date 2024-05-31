@@ -67,7 +67,7 @@ function loadShuffleButtonEvent(audioPlayer, playlist, interaction) {
         let embedPlaylistOption = new EmbedPlaylistOptions();
         embedPlaylistOption.setDescription("Playlist is shuffled.")
         await embedHelper.updateEmbedPlaylistByOptions(interaction, 
-            false, embedPlaylistOption,
+            embedPlaylistOption,
             createButtonOptions(playlist, audioPlayer.state.status));
         audioPlayer.emit(AudioPlayerStatus.Idle, null, null, constants.enumAudioSelection.curr);
     });
@@ -85,7 +85,7 @@ function loadVolumeUpButtonEvent(audioPlayer, playlist, interaction) {
         let embedPlaylistOption = new EmbedPlaylistOptions();
         embedPlaylistOption.setDescription("Volume will be increased after current music is changed.")
         await embedHelper.updateEmbedPlaylistByOptions(interaction, 
-            false, embedPlaylistOption, 
+            embedPlaylistOption, 
             createButtonOptions(playlist, audioPlayer.state.status));
     });
 }
@@ -102,7 +102,7 @@ function loadVolumeDownButtonEvent(audioPlayer, playlist, interaction) {
         let embedPlaylistOption = new EmbedPlaylistOptions();
         embedPlaylistOption.setDescription("Volume will be decreased after current music is changed.")
         await embedHelper.updateEmbedPlaylistByOptions(interaction, 
-            false, embedPlaylistOption, 
+            embedPlaylistOption, 
             createButtonOptions(playlist, audioPlayer.state.status));
     });
 }
@@ -119,7 +119,7 @@ function loadMoreButtonEvent(audioPlayer, playlist, interaction) {
         let isMoreButtonClicked = playlist.getMoreButtonClicked();
         playlist.setMoreButtonClicked(!isMoreButtonClicked);
         await embedHelper.updateEmbedPlaylistByOptions(interaction, 
-            false, embedPlaylistOption, 
+            embedPlaylistOption, 
             createButtonOptions(playlist, audioPlayer.state.status));
     });
 }
@@ -169,7 +169,7 @@ function loadPauseButtonEvent(audioPlayer, playlist, interaction) {
             embedPlaylistOptions.setDescription(statusMsg);
 
             return await embedHelper.updateEmbedPlaylistByOptions(interaction, 
-                false, embedPlaylistOptions,
+                embedPlaylistOptions,
                 createButtonOptions(playlist, audioPlayer.state.status));
         }
 
@@ -185,7 +185,7 @@ function loadPauseButtonEvent(audioPlayer, playlist, interaction) {
 
         embedPlaylistOptions.setDescription(statusMsg);
         await embedHelper.updateEmbedPlaylistByOptions(interaction, 
-            false, embedPlaylistOptions,
+            embedPlaylistOptions,
             createButtonOptions(playlist, audioPlayer.state.status));
 
     });

@@ -130,12 +130,11 @@ function createButtonRows(buttonOptions) {
 /**
  * Recreates embed playlist and updates it in the channel
  *
- * @param {boolean} error - determines if any error occurred in the embed
  * @param {EmbedPlaylistOptions} embedPlaylistOptions
  * @param {import("../models/buttonOptions")} buttonOptions
  * @return {Promise<import("discord.js").Message>} promise of message that is updated
  */
-async function updateEmbedPlaylistByOptions(interaction, error, embedPlaylistOptions, buttonOptions) {
+async function updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions, buttonOptions) {
     let embedStructure = {
         embeds: [],
         components: []
@@ -150,7 +149,7 @@ async function updateEmbedPlaylistByOptions(interaction, error, embedPlaylistOpt
         embedStructure.embeds.push(embedPlaylist);
     }
 
-    if (!error && buttonOptions) {
+    if (buttonOptions) {
         let buttonRows = createButtonRows(buttonOptions);
         
         buttonRows.forEach((buttonRow) => {

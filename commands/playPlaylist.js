@@ -32,7 +32,7 @@ module.exports = {
             errorMsg = "Discord bot is already running in voice channel";
             logger.error(errorMsg);
             embedPlaylistOptions.setDescription(errorMsg);
-            await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions);
             return;
         }
 
@@ -41,7 +41,7 @@ module.exports = {
             errorMsg = "Could not find playlist " + playlistName;
             logger.error(errorMsg);
             embedPlaylistOptions.setDescription(errorMsg);
-            await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions);
             return;
         }
 
@@ -51,7 +51,7 @@ module.exports = {
             errorMsg = "Could not find voice channel";
             logger.error(errorMsg);
             embedPlaylistOptions.setDescription(errorMsg);
-            await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions);
             return;
         }
         
@@ -60,7 +60,7 @@ module.exports = {
         if (musicPaths && musicPaths.length > 0) {
             embedPlaylistOptions.setDescription("Found playlist " + playlistName + " which has " + musicPaths.length + " musics.");
             embedPlaylistOptions.setTitle("Playlist " + playlistName);
-            await embedHelper.updateEmbedPlaylistByOptions(interaction, false, embedPlaylistOptions);
+            await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions);
 
 
             const connection = joinVoiceChannel({
@@ -73,7 +73,7 @@ module.exports = {
                 errorMsg = "Could not establish connection between bot and voice channel.";
                 logger.error(errorMsg);
                 embedPlaylistOptions.setDescription(errorMsg);
-                await embedHelper.updateEmbedPlaylistByOptions(interaction, true, embedPlaylistOptions);
+                await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions);
                 return;
             }
 
@@ -113,7 +113,7 @@ function initializeAudioPlayer(interaction, connection, musicPaths) {
         if (!audio) {
             let embedPlaylistOptions = new EmbedPlaylistOptions();
             embedPlaylistOptions.setDescription("Audio player finished playing last music");
-            return await embedHelper.updateEmbedPlaylistByOptions(interaction, false, embedPlaylistOptions, createButtonOptionIfLastMusicPlayed());
+            return await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions, createButtonOptionIfLastMusicPlayed());
         }
         
         audio.volume.setVolume(playlist.getVolume());
@@ -127,7 +127,7 @@ function initializeAudioPlayer(interaction, connection, musicPaths) {
         embedPlaylistOptions.addField({ name: "Prev Music", value: audio.metadata.prevMusic });
         embedPlaylistOptions.addField({ name: "Next Music", value: audio.metadata.nextMusic });
         embedPlaylistOptions.addField({ name: "Volume", value: (playlist.getVolume() * 100).toString() + "/100" });
-        await embedHelper.updateEmbedPlaylistByOptions(interaction, false, embedPlaylistOptions, createButtonOptions(playlist, audioPlayer.state.status));
+        await embedHelper.updateEmbedPlaylistByOptions(interaction, embedPlaylistOptions, createButtonOptions(playlist, audioPlayer.state.status));
     });
 
     buttonEventHelper.loadButtonEventListeners(audioPlayer, playlist, interaction, connection);
